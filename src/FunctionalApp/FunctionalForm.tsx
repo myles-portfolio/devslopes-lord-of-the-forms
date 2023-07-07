@@ -3,6 +3,7 @@ import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
 import { isEmailValid, isPhoneValid } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
+import React from "react";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -149,7 +150,11 @@ export const FunctionalForm = ({
 			{/* City Input */}
 			<div className="input-wrap">
 				<label>{"City"}:</label>
-				<select value={city} onChange={(e) => setCity(e.target.value)}>
+				<select
+					value={city}
+					onChange={(e) => setCity(e.target.value)}
+					style={{ width: "100%", maxWidth: "310px" }}
+				>
 					<option value="">Select a city</option>
 					{allCities.map((city) => (
 						<option key={city} value={city}>
@@ -166,17 +171,19 @@ export const FunctionalForm = ({
 				<label htmlFor="phone">Phone:</label>
 				<div id="phone-input-wrap">
 					{phoneInputsRefs.map((ref, index) => (
-						<input
-							key={index}
-							type="text"
-							id={`phone-input-${index + 1}`}
-							placeholder="0"
-							maxLength={index < 3 ? 2 : 1}
-							pattern="[0-9]*"
-							inputMode="numeric"
-							ref={ref}
-							onChange={(e) => handlePhoneInputChange(index, e.target.value)}
-						/>
+						<React.Fragment key={index}>
+							<input
+								type="text"
+								id={`phone-input-${index + 1}`}
+								placeholder="0"
+								maxLength={index < 3 ? 2 : 1}
+								pattern="[0-9]*"
+								inputMode="numeric"
+								ref={ref}
+								onChange={(e) => handlePhoneInputChange(index, e.target.value)}
+							/>
+							{index < 3 && <span className="phone-input-dash">-</span>}
+						</React.Fragment>
 					))}
 				</div>
 			</div>
