@@ -1,15 +1,13 @@
 import { useRef, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
-import { isEmailValid, isPhoneValid } from "../utils/validations";
+import {
+	errorMessages,
+	isEmailValid,
+	isPhoneValid,
+} from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import React from "react";
-
-const firstNameErrorMessage = "First name must be at least 2 characters long";
-const lastNameErrorMessage = "Last name must be at least 2 characters long";
-const emailErrorMessage = "Email is Invalid";
-const cityErrorMessage = "City is Invalid";
-const phoneNumberErrorMessage = "Invalid Phone Number";
 
 export const FunctionalForm = ({
 	onSubmit,
@@ -116,7 +114,7 @@ export const FunctionalForm = ({
 			</div>
 
 			{showFirstNameError && (
-				<ErrorMessage message={firstNameErrorMessage} show={true} />
+				<ErrorMessage message={errorMessages.firstName} show={true} />
 			)}
 
 			{/* Last Name Input */}
@@ -130,7 +128,7 @@ export const FunctionalForm = ({
 			</div>
 
 			{showLastNameError && (
-				<ErrorMessage message={lastNameErrorMessage} show={true} />
+				<ErrorMessage message={errorMessages.lastName} show={true} />
 			)}
 
 			{/* Email Input */}
@@ -144,7 +142,7 @@ export const FunctionalForm = ({
 			</div>
 
 			{showEmailError && (
-				<ErrorMessage message={emailErrorMessage} show={true} />
+				<ErrorMessage message={errorMessages.email} show={true} />
 			)}
 
 			{/* City Input */}
@@ -164,7 +162,9 @@ export const FunctionalForm = ({
 				</select>
 			</div>
 
-			{showCityError && <ErrorMessage message={cityErrorMessage} show={true} />}
+			{showCityError && (
+				<ErrorMessage message={errorMessages.city} show={true} />
+			)}
 
 			{/* Phone Number */}
 			<div className="input-wrap">
@@ -189,7 +189,7 @@ export const FunctionalForm = ({
 			</div>
 
 			{showPhoneError && (
-				<ErrorMessage message={phoneNumberErrorMessage} show={true} />
+				<ErrorMessage message={errorMessages.phoneNumber} show={true} />
 			)}
 
 			<input type="submit" value="Submit" />
