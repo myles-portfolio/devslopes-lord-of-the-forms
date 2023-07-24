@@ -1,4 +1,4 @@
-export type ErrorMessages = {
+export type Messages = {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -6,7 +6,7 @@ export type ErrorMessages = {
 	phoneNumber: string;
 };
 
-export const errorMessages = {
+export const errorMessages: Messages = {
 	firstName: "First name must be at least 2 characters long",
 	lastName: "Last name must be at least 2 characters long",
 	email: "Email is Invalid",
