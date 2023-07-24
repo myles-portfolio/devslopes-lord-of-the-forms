@@ -2,7 +2,8 @@ import React, { Component, createRef } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
 import { allCities } from "../utils/all-cities";
-import { errorMessages, isEmailValid } from "../utils/validations";
+import { isEmailValid } from "../utils/validations";
+import { errorMessages } from "../utils/MESSAGES";
 
 export class ClassForm extends Component<{
 	onSubmit: (data: UserInformation) => void;
@@ -151,7 +152,7 @@ export class ClassForm extends Component<{
 						style={{ width: "100%", maxWidth: "310px" }}
 						ref={this.cityRef}
 					>
-						<option value="">Select a city</option>
+						<option value="">Hobbiton</option>
 						{allCities.map((city) => (
 							<option key={city} value={city}>
 								{city}

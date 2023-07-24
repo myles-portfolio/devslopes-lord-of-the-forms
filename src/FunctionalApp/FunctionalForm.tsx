@@ -1,13 +1,10 @@
 import { useRef, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
-import {
-	errorMessages,
-	isEmailValid,
-	isPhoneValid,
-} from "../utils/validations";
+import { isEmailValid, isPhoneValid } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import React from "react";
+import { errorMessages } from "../utils/MESSAGES";
 
 export const FunctionalForm = ({
 	onSubmit,
@@ -87,6 +84,28 @@ export const FunctionalForm = ({
 		}
 	};
 
+	const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setFirstName(value);
+		setShowFirstNameError(value.length >= 2 ? false : showFirstNameError);
+	};
+
+	const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setLastName(value);
+		setShowLastNameError(value.length >= 2 ? false : showLastNameError);
+	};
+
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setEmail(e.target.value);
+		setShowEmailError(false);
+	};
+
+	const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setCity(e.target.value);
+		setShowCityError(false);
+	};
+
 	const handlePhoneInputChange = (index: number, value: string) => {
 		if (value === "") {
 			if (index > 0) {
@@ -109,7 +128,7 @@ export const FunctionalForm = ({
 				<input
 					placeholder="Bilbo"
 					value={firstName}
-					onChange={(e) => setFirstName(e.target.value)}
+					onChange={handleFirstNameChange}
 				/>
 			</div>
 
@@ -123,7 +142,7 @@ export const FunctionalForm = ({
 				<input
 					placeholder="Baggins"
 					value={lastName}
-					onChange={(e) => setLastName(e.target.value)}
+					onChange={handleLastNameChange}
 				/>
 			</div>
 
@@ -137,7 +156,7 @@ export const FunctionalForm = ({
 				<input
 					placeholder="bilbo-baggins@adventurehobbits.net"
 					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					onChange={handleEmailChange}
 				/>
 			</div>
 
@@ -150,10 +169,10 @@ export const FunctionalForm = ({
 				<label>{"City"}:</label>
 				<select
 					value={city}
-					onChange={(e) => setCity(e.target.value)}
+					onChange={handleCityChange}
 					style={{ width: "100%", maxWidth: "310px" }}
 				>
-					<option value="">Select a city</option>
+					<option value="">Hobbiton</option>
 					{allCities.map((city) => (
 						<option key={city} value={city}>
 							{city}
