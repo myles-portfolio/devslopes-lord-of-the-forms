@@ -3,7 +3,7 @@ import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
 import { allCities } from "../utils/all-cities";
 import { isEmailValid } from "../utils/validations";
-import { errorMessages } from "../utils/MESSAGES";
+import { errorMessages } from "../utils/messages";
 
 export class ClassForm extends Component<{
 	onSubmit: (data: UserInformation) => void;
@@ -79,6 +79,11 @@ export class ClassForm extends Component<{
 		}
 	};
 
+	handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		this.setState({ city: e.target.value });
+		this.setState({ showCityError: false });
+	};
+
 	render() {
 		const {
 			firstName,
@@ -146,19 +151,19 @@ export class ClassForm extends Component<{
 				{/* City Input */}
 				<div className="input-wrap">
 					<label>{"City"}:</label>
-					<select
+					<input
+						type="text"
+						list="cities"
 						value={city}
-						onChange={(e) => this.setState({ city: e.target.value })}
-						style={{ width: "100%", maxWidth: "310px" }}
-						ref={this.cityRef}
-					>
-						<option value="">Hobbiton</option>
+						placeholder="Hobbiton"
+						onChange={this.handleCityChange}
+					/>
+					<datalist id="cities">
+						<option value="Hobbiton" />
 						{allCities.map((city) => (
-							<option key={city} value={city}>
-								{city}
-							</option>
+							<option key={city} value={city} />
 						))}
-					</select>
+					</datalist>
 				</div>
 
 				{showCityError && (

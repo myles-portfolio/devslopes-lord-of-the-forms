@@ -4,7 +4,7 @@ import { UserInformation } from "../types";
 import { isEmailValid, isPhoneValid } from "../utils/validations";
 import { allCities } from "../utils/all-cities";
 import React from "react";
-import { errorMessages } from "../utils/MESSAGES";
+import { errorMessages } from "../utils/messages";
 
 export const FunctionalForm = ({
 	onSubmit,
@@ -101,7 +101,7 @@ export const FunctionalForm = ({
 		setShowEmailError(false);
 	};
 
-	const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+	const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setCity(e.target.value);
 		setShowCityError(false);
 	};
@@ -167,18 +167,19 @@ export const FunctionalForm = ({
 			{/* City Input */}
 			<div className="input-wrap">
 				<label>{"City"}:</label>
-				<select
+				<input
+					type="text"
+					list="cities"
 					value={city}
+					placeholder="Hobbiton"
 					onChange={handleCityChange}
-					style={{ width: "100%", maxWidth: "310px" }}
-				>
-					<option value="">Hobbiton</option>
+				/>
+				<datalist id="cities">
+					<option value="Hobbiton" />
 					{allCities.map((city) => (
-						<option key={city} value={city}>
-							{city}
-						</option>
+						<option key={city} value={city} />
 					))}
-				</select>
+				</datalist>
 			</div>
 
 			{showCityError && (
