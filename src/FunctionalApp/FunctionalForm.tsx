@@ -28,8 +28,9 @@ export const FunctionalForm = ({
 	const [showEmailError, setShowEmailError] = useState(false);
 	const [showCityError, setShowCityError] = useState(false);
 	const [showPhoneError, setShowPhoneError] = useState(false);
+	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-	const handleFormValidationCheck = (event: React.FormEvent) => {
+	const handleFormSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
 		let isValid = true;
 
@@ -81,29 +82,44 @@ export const FunctionalForm = ({
 			};
 
 			onSubmit(userData);
+			setIsFormSubmitted(true);
 		}
 	};
 
 	const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setFirstName(value);
-		setShowFirstNameError(value.length >= 2 ? false : showFirstNameError);
+		if (isFormSubmitted) {
+			setShowFirstNameError(value.trim().length >= 2);
+		} else {
+			setShowFirstNameError(value.length >= 2 ? false : showFirstNameError);
+		}
 	};
 
 	const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setLastName(value);
-		setShowLastNameError(value.length >= 2 ? false : showLastNameError);
+		if (isFormSubmitted) {
+			setShowFirstNameError(value.trim().length >= 2);
+		} else {
+			setShowFirstNameError(value.length >= 2 ? false : showFirstNameError);
+		}
 	};
 
 	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-		setShowEmailError(false);
+		const value = e.target.value;
+		setEmail(value);
+		if (isFormSubmitted) {
+			setShowEmailError(!isEmailValid(value));
+		}
 	};
 
 	const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setCity(e.target.value);
-		setShowCityError(false);
+		const value = e.target.value;
+		setCity(value);
+		if (isFormSubmitted) {
+			setShowCityError(value.trim().length === 0);
+		}
 	};
 
 	const handlePhoneInputChange = (index: number, value: string) => {
@@ -111,13 +127,17 @@ export const FunctionalForm = ({
 			if (index > 0) {
 				phoneInputsRefs[index - 1].current?.focus();
 			}
+			setShowPhoneError(false);
 		} else if (value.length === 2 && index < phoneInputsRefs.length - 1) {
 			phoneInputsRefs[index + 1].current?.focus();
+		}
+		if (isFormSubmitted) {
+			setShowPhoneError(!isPhoneValid(value));
 		}
 	};
 
 	return (
-		<form onSubmit={handleFormValidationCheck}>
+		<form onSubmit={handleFormSubmit}>
 			<u>
 				<h3>User Information Form</h3>
 			</u>
