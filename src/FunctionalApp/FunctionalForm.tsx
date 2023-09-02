@@ -24,33 +24,42 @@ export const FunctionalForm = ({
 	phoneNumberInput,
 	setPhoneNumber,
 }: FunctionalFormProps) => {
+	/* Input States */
 	const [firstNameInput, setFirstName] = useState("");
 	const [lastNameInput, setLastName] = useState("");
 	const [emailInput, setEmail] = useState("");
 	const [cityInput, setCity] = useState("");
 
+	/* Form States */
 	const [isSubmitAttempted, setSubmitAttempted] = useState(false);
 	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
-	const showFirstNameError = isFormSubmitted && !isNameValid(firstNameInput);
-	const showLastNameError = isFormSubmitted && !isNameValid(lastNameInput);
-	const showEmailError = isFormSubmitted && !isEmailValid(emailInput);
-	const showCityError = isFormSubmitted && !isCityValid(cityInput);
-	const showPhoneError = isFormSubmitted && !isPhoneValid(phoneNumberInput);
+	/* Error States */
+	const [showFirstNameError, setShowFirstNameError] = useState(false);
+	const [showLastNameError, setShowLastNameError] = useState(false);
+	const [showEmailError, setShowEmailError] = useState(false);
+	const [showCityError, setShowCityError] = useState(false);
+	const [showPhoneError, setShowPhoneError] = useState(false);
 
 	const handleFormSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
+		setSubmitAttempted(true);
+
+		setShowFirstNameError(!isNameValid(firstNameInput));
+		setShowLastNameError(!isNameValid(lastNameInput));
+		setShowEmailError(!isEmailValid(emailInput));
+		setShowCityError(!isCityValid(cityInput));
+		setShowPhoneError(!isPhoneValid(phoneNumberInput));
 
 		const hasErrors =
-			showFirstNameError ||
-			showLastNameError ||
-			showEmailError ||
-			showCityError ||
-			showPhoneError;
+			!isNameValid(firstNameInput) ||
+			!isNameValid(lastNameInput) ||
+			!isEmailValid(emailInput) ||
+			!isCityValid(cityInput) ||
+			!isPhoneValid(phoneNumberInput);
 
 		if (hasErrors) {
 			alert("Bad Inputs");
-			setSubmitAttempted(true);
 			return;
 		} else {
 			const userData: UserInformation = {
@@ -66,6 +75,41 @@ export const FunctionalForm = ({
 		}
 	};
 
+	const handleFirstNameChange = (name: string) => {
+		setFirstName(name);
+		if (isSubmitAttempted) {
+			setShowFirstNameError(!isNameValid(name));
+		}
+	};
+
+	const handleLastNameChange = (name: string) => {
+		setLastName(name);
+		if (isSubmitAttempted) {
+			setShowLastNameError(!isNameValid(name));
+		}
+	};
+
+	const handleEmailChange = (email: string) => {
+		setEmail(email);
+		if (isSubmitAttempted) {
+			setShowEmailError(!isEmailValid(email));
+		}
+	};
+
+	const handleCityChange = (city: string) => {
+		setCity(city);
+		if (isSubmitAttempted) {
+			setShowCityError(!isCityValid(city));
+		}
+	};
+
+	const handlePhoneChange = (phone: string) => {
+		setPhoneNumber(phone);
+		if (isSubmitAttempted) {
+			setShowPhoneError(!isPhoneValid(phone));
+		}
+	};
+
 	return (
 		<form onSubmit={handleFormSubmit}>
 			<u>
@@ -77,7 +121,7 @@ export const FunctionalForm = ({
 				label="First Name"
 				placeholder="Bilbo"
 				value={firstNameInput}
-				onChange={setFirstName}
+				onChange={handleFirstNameChange}
 			/>
 
 			{showFirstNameError && isSubmitAttempted && (
@@ -89,7 +133,7 @@ export const FunctionalForm = ({
 				label="Last Name"
 				placeholder="Baggins"
 				value={lastNameInput}
-				onChange={setLastName}
+				onChange={handleLastNameChange}
 			/>
 
 			{showLastNameError && isSubmitAttempted && (
@@ -101,7 +145,7 @@ export const FunctionalForm = ({
 				label="Email"
 				placeholder="bilbo-baggins@adventurehobbits.net"
 				value={emailInput}
-				onChange={setEmail}
+				onChange={handleEmailChange}
 			/>
 
 			{showEmailError && isSubmitAttempted && (
@@ -113,7 +157,7 @@ export const FunctionalForm = ({
 				label="City"
 				placeholder="Hobbiton"
 				value={cityInput}
-				onChange={setCity}
+				onChange={handleCityChange}
 				list="cities"
 			/>
 			<datalist id="cities">
@@ -129,7 +173,7 @@ export const FunctionalForm = ({
 
 			{/* Phone Number */}
 			<FunctionalPhoneInput
-				onPhoneChange={setPhoneNumber}
+				onPhoneChange={handlePhoneChange}
 				isFormSubmitted={isFormSubmitted}
 			/>
 
