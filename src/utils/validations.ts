@@ -1,6 +1,7 @@
+import { CITIES } from "./CITIES";
+
 export function isEmailValid(emailAddress: string) {
-	// eslint-disable-next-line no-useless-escape
-	const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+	const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 	return !!emailAddress.match(regex);
 }
 
@@ -16,4 +17,14 @@ export const isPhoneValid = (phoneNumber: string): boolean => {
 	}
 
 	return true;
+};
+
+export const isCityValid = (city: string): boolean => {
+	const cityLowercase = city.toLowerCase();
+	return CITIES.some((cityItem) => cityItem.toLowerCase() === cityLowercase);
+};
+
+export const isNameValid = (name: string): boolean => {
+	const regex = /^[a-zA-Z-' ]+$/;
+	return regex.test(name) && name.length >= 2;
 };

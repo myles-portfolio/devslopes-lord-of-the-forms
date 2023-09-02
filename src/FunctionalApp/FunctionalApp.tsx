@@ -5,6 +5,7 @@ import { UserInformation } from "../types";
 
 export const FunctionalApp = () => {
 	const [userData, setUserData] = useState<UserInformation | null>(null);
+	const [phoneNumberInput, setPhoneNumber] = useState("");
 
 	const handleFormSubmit = (data: UserInformation) => {
 		setUserData(data);
@@ -14,7 +15,11 @@ export const FunctionalApp = () => {
 		<>
 			<h2>Functional</h2>
 			<ProfileInformation userData={userData} />
-			<FunctionalForm onSubmit={handleFormSubmit} />
+			<FunctionalForm
+				phoneNumberInput={phoneNumberInput}
+				setPhoneNumber={setPhoneNumber}
+				onSubmit={handleFormSubmit}
+			/>
 		</>
 	);
 };

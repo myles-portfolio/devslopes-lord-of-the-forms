@@ -6,12 +6,9 @@ interface State {
 	userData: UserInformation | null;
 }
 export class ClassApp extends Component<Record<string, never>, State> {
-	constructor(props: Record<string, never>) {
-		super(props);
-		this.state = {
-			userData: null,
-		};
-	}
+	state: State = {
+		userData: null,
+	};
 
 	handleFormSubmit = (data: UserInformation) => {
 		this.setState({ userData: data });

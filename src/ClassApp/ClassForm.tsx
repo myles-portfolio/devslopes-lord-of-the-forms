@@ -1,9 +1,9 @@
 import React, { Component, createRef } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
-import { allCities } from "../utils/all-cities";
+import { CITIES } from "../utils/CITIES";
 import { isEmailValid } from "../utils/validations";
-import { errorMessages } from "../utils/messages";
+import { errorMessages } from "../utils/errorMessages";
 
 export class ClassForm extends Component<{
 	onSubmit: (data: UserInformation) => void;
@@ -160,7 +160,7 @@ export class ClassForm extends Component<{
 					/>
 					<datalist id="cities">
 						<option value="Hobbiton" />
-						{allCities.map((city) => (
+						{CITIES.map((city) => (
 							<option key={city} value={city} />
 						))}
 					</datalist>
