@@ -127,5 +127,5 @@ Profile Information Component
 
 Email Validations
 
-- You will need to validate that the email is a valid email
-- We've provided a function called `isEmailValid` in `validations.ts`
+- [x] You will need to validate that the email is a valid email
+- [x] We've provided a function called `isEmailValid` in `validations.ts`

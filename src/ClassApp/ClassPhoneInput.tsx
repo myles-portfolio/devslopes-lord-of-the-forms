@@ -19,7 +19,7 @@ export class ClassPhoneInput extends Component<ClassPhoneInputProps> {
 	};
 
 	componentDidUpdate(prevProps: ClassPhoneInputProps) {
-		if (this.props.reset !== prevProps.reset && this.props.reset) {
+		if (prevProps.reset !== this.props.reset) {
 			this.setState({ phoneParts: ["", "", "", ""] });
 		}
 	}

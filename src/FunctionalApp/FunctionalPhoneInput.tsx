@@ -25,7 +25,6 @@ export const FunctionalPhoneInput = ({
 		return parts;
 	});
 
-	// Update the phoneParts state when the value prop changes
 	useEffect(() => {
 		const parts: string[] = value.match(/.{1,2}/g) || [];
 		while (parts.length < 4) {
