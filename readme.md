@@ -119,8 +119,8 @@ Form
 
 Profile Information Component
 
-- You can share this between the `FunctionalApp` and the `ClassApp`
-- build a `capitalize` function in `transformations.ts` to correctly display a first and last name
+- [x] You can share this between the `FunctionalApp` and the `ClassApp`
+- [x] build a `capitalize` function in `transformations.ts` to correctly display a first and last name
 
 - [x] build a `formatPhone` function in `transformations.ts` that will turn "1234567" into "12-34-56-7"
 - [x] use `capitalize` and `formatPHone` in the `ProfileInformation` component in order to format things appropriately
