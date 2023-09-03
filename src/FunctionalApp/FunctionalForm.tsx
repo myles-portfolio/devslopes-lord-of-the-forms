@@ -13,43 +13,20 @@ import { CITIES } from "../utils/CITIES";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
 import { FunctionalTextInput } from "./FunctionalTextInput";
 
-interface FunctionalFormProps {
+type FunctionalFormProps = {
 	onSubmit: (data: UserInformation) => void;
-	phoneNumberInput: string;
-	setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
-}
+};
 
-export const FunctionalForm = ({
-	onSubmit,
-	phoneNumberInput,
-	setPhoneNumber,
-}: FunctionalFormProps) => {
-	/* Input States */
+export const FunctionalForm = ({ onSubmit }: FunctionalFormProps) => {
+	const [showValidationErrors, setShowValidationErrors] = useState(false);
 	const [firstNameInput, setFirstName] = useState("");
 	const [lastNameInput, setLastName] = useState("");
 	const [emailInput, setEmail] = useState("");
 	const [cityInput, setCity] = useState("");
-
-	/* Form States */
-	const [isSubmitAttempted, setSubmitAttempted] = useState(false);
-	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-
-	/* Error States */
-	const [showFirstNameError, setShowFirstNameError] = useState(false);
-	const [showLastNameError, setShowLastNameError] = useState(false);
-	const [showEmailError, setShowEmailError] = useState(false);
-	const [showCityError, setShowCityError] = useState(false);
-	const [showPhoneError, setShowPhoneError] = useState(false);
+	const [phoneNumberInput, setPhoneNumber] = useState("");
 
 	const handleFormSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
-		setSubmitAttempted(true);
-
-		setShowFirstNameError(!isNameValid(firstNameInput));
-		setShowLastNameError(!isNameValid(lastNameInput));
-		setShowEmailError(!isEmailValid(emailInput));
-		setShowCityError(!isCityValid(cityInput));
-		setShowPhoneError(!isPhoneValid(phoneNumberInput));
 
 		const hasErrors =
 			!isNameValid(firstNameInput) ||
@@ -59,6 +36,7 @@ export const FunctionalForm = ({
 			!isPhoneValid(phoneNumberInput);
 
 		if (hasErrors) {
+			setShowValidationErrors(true);
 			alert("Bad Inputs");
 			return;
 		} else {
@@ -71,42 +49,14 @@ export const FunctionalForm = ({
 			};
 
 			onSubmit(userData);
-			setIsFormSubmitted(true);
-		}
-	};
 
-	const handleFirstNameChange = (name: string) => {
-		setFirstName(name);
-		if (isSubmitAttempted) {
-			setShowFirstNameError(!isNameValid(name));
-		}
-	};
+			setFirstName("");
+			setLastName("");
+			setEmail("");
+			setCity("");
+			setPhoneNumber("");
 
-	const handleLastNameChange = (name: string) => {
-		setLastName(name);
-		if (isSubmitAttempted) {
-			setShowLastNameError(!isNameValid(name));
-		}
-	};
-
-	const handleEmailChange = (email: string) => {
-		setEmail(email);
-		if (isSubmitAttempted) {
-			setShowEmailError(!isEmailValid(email));
-		}
-	};
-
-	const handleCityChange = (city: string) => {
-		setCity(city);
-		if (isSubmitAttempted) {
-			setShowCityError(!isCityValid(city));
-		}
-	};
-
-	const handlePhoneChange = (phone: string) => {
-		setPhoneNumber(phone);
-		if (isSubmitAttempted) {
-			setShowPhoneError(!isPhoneValid(phone));
+			setShowValidationErrors(false);
 		}
 	};
 
@@ -121,10 +71,10 @@ export const FunctionalForm = ({
 				label="First Name"
 				placeholder="Bilbo"
 				value={firstNameInput}
-				onChange={handleFirstNameChange}
+				onChange={(newValue) => setFirstName(newValue)}
 			/>
 
-			{showFirstNameError && isSubmitAttempted && (
+			{showValidationErrors && !isNameValid(firstNameInput) && (
 				<ErrorMessage message={errorMessages.firstName} show={true} />
 			)}
 
@@ -133,10 +83,10 @@ export const FunctionalForm = ({
 				label="Last Name"
 				placeholder="Baggins"
 				value={lastNameInput}
-				onChange={handleLastNameChange}
+				onChange={(newValue) => setLastName(newValue)}
 			/>
 
-			{showLastNameError && isSubmitAttempted && (
+			{showValidationErrors && !isNameValid(lastNameInput) && (
 				<ErrorMessage message={errorMessages.lastName} show={true} />
 			)}
 
@@ -145,10 +95,10 @@ export const FunctionalForm = ({
 				label="Email"
 				placeholder="bilbo-baggins@adventurehobbits.net"
 				value={emailInput}
-				onChange={handleEmailChange}
+				onChange={(newValue) => setEmail(newValue)}
 			/>
 
-			{showEmailError && isSubmitAttempted && (
+			{showValidationErrors && !isEmailValid(emailInput) && (
 				<ErrorMessage message={errorMessages.email} show={true} />
 			)}
 
@@ -157,7 +107,7 @@ export const FunctionalForm = ({
 				label="City"
 				placeholder="Hobbiton"
 				value={cityInput}
-				onChange={handleCityChange}
+				onChange={(newValue) => setCity(newValue)}
 				list="cities"
 			/>
 			<datalist id="cities">
@@ -167,17 +117,17 @@ export const FunctionalForm = ({
 				))}
 			</datalist>
 
-			{showCityError && isSubmitAttempted && (
+			{showValidationErrors && !isCityValid(cityInput) && (
 				<ErrorMessage message={errorMessages.city} show={true} />
 			)}
 
 			{/* Phone Number */}
 			<FunctionalPhoneInput
-				onPhoneChange={handlePhoneChange}
-				isFormSubmitted={isFormSubmitted}
+				onPhoneChange={(newValue) => setPhoneNumber(newValue)}
+				value={phoneNumberInput}
 			/>
 
-			{showPhoneError && isSubmitAttempted && (
+			{showValidationErrors && !isPhoneValid(phoneNumberInput) && (
 				<ErrorMessage message={errorMessages.phoneNumber} show={true} />
 			)}
 

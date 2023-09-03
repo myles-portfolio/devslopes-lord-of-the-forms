@@ -1,202 +1,159 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { UserInformation } from "../types";
-import { CITIES } from "../utils/CITIES";
-import { isEmailValid } from "../utils/validations";
+import {
+	isCityValid,
+	isEmailValid,
+	isNameValid,
+	isPhoneValid,
+} from "../utils/validations";
 import { errorMessages } from "../utils/errorMessages";
+import { CITIES } from "../utils/CITIES";
+import { ClassPhoneInput } from "./ClassPhoneInput";
+import { ClassTextInput } from "./ClassTextInput";
 
-export class ClassForm extends Component<{
+type ClassFormProps = {
 	onSubmit: (data: UserInformation) => void;
-}> {
-	firstNameRef = createRef<HTMLInputElement>();
-	lastNameRef = createRef<HTMLInputElement>();
-	emailRef = createRef<HTMLInputElement>();
-	cityRef = createRef<HTMLSelectElement>();
-	phoneInputsRefs = [
-		createRef<HTMLInputElement>(),
-		createRef<HTMLInputElement>(),
-		createRef<HTMLInputElement>(),
-		createRef<HTMLInputElement>(),
-	];
+};
 
-	state = {
-		firstName: "",
-		lastName: "",
-		email: "",
-		city: "",
-		showFirstNameError: false,
-		showLastNameError: false,
-		showEmailError: false,
-		showCityError: false,
-		showPhoneError: false,
+type ClassFormState = {
+	firstNameInput: string;
+	lastNameInput: string;
+	emailInput: string;
+	cityInput: string;
+	phoneNumberInput: string;
+	resetPhoneInput: boolean;
+	showValidationErrors: boolean;
+};
+
+export class ClassForm extends Component<ClassFormProps, ClassFormState> {
+	state: ClassFormState = {
+		firstNameInput: "",
+		lastNameInput: "",
+		emailInput: "",
+		cityInput: "",
+		phoneNumberInput: "",
+		resetPhoneInput: false,
+		showValidationErrors: false,
 	};
 
-	handleFormValidationCheck = (event: React.FormEvent) => {
+	handleFormSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
 
-		const { firstName, lastName, email, city } = this.state;
+		const hasErrors =
+			!isNameValid(this.state.firstNameInput) ||
+			!isNameValid(this.state.lastNameInput) ||
+			!isEmailValid(this.state.emailInput) ||
+			!isCityValid(this.state.cityInput) ||
+			!isPhoneValid(this.state.phoneNumberInput);
 
-		const errors = {
-			firstName: firstName.length < 2,
-			lastName: lastName.length < 2,
-			email: !isEmailValid(email),
-			city: city.length === 0,
-		};
-
-		this.setState({
-			showFirstNameError: errors.firstName,
-			showLastNameError: errors.lastName,
-			showEmailError: errors.email,
-			showCityError: errors.city,
-		});
-
-		const isValid = !Object.values(errors).some((error) => error);
-
-		if (isValid) {
-			const phoneNumber = this.phoneInputsRefs
-				.map((ref) => ref.current?.value)
-				.join("");
-
+		if (hasErrors) {
+			this.setState({ showValidationErrors: true });
+			alert("Bad Inputs");
+			return;
+		} else {
 			const userData: UserInformation = {
-				firstName,
-				lastName,
-				email,
-				city,
-				phone: phoneNumber,
+				firstName: this.state.firstNameInput,
+				lastName: this.state.lastNameInput,
+				email: this.state.emailInput,
+				city: this.state.cityInput,
+				phone: this.state.phoneNumberInput,
 			};
 
 			this.props.onSubmit(userData);
-		}
-	};
+			this.setState({
+				firstNameInput: "",
+				lastNameInput: "",
+				emailInput: "",
+				cityInput: "",
+				phoneNumberInput: "",
+				showValidationErrors: false,
+			});
 
-	handlePhoneInputChange = (index: number, value: string) => {
-		if (value === "") {
-			if (index > 0) {
-				this.phoneInputsRefs[index - 1].current?.focus();
-			}
-		} else if (value.length === 2 && index < this.phoneInputsRefs.length - 1) {
-			this.phoneInputsRefs[index + 1].current?.focus();
+			this.setState((prevState) => ({
+				resetPhoneInput: !prevState.resetPhoneInput,
+			}));
 		}
-	};
-
-	handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ city: e.target.value });
-		this.setState({ showCityError: false });
 	};
 
 	render() {
-		const {
-			firstName,
-			lastName,
-			email,
-			city,
-			showFirstNameError,
-			showLastNameError,
-			showEmailError,
-			showCityError,
-			showPhoneError,
-		} = this.state;
-
 		return (
-			<form onSubmit={this.handleFormValidationCheck}>
+			<form onSubmit={this.handleFormSubmit}>
 				<u>
 					<h3>User Information Form</h3>
 				</u>
 
 				{/* First Name Input */}
-				<div className="input-wrap">
-					<label>{"First Name"}:</label>
-					<input
-						placeholder="Bilbo"
-						value={firstName}
-						onChange={(e) => this.setState({ firstName: e.target.value })}
-						ref={this.firstNameRef}
-					/>
-				</div>
+				<ClassTextInput
+					label="First Name"
+					placeholder="Bilbo"
+					value={this.state.firstNameInput}
+					onChange={(newValue) => this.setState({ firstNameInput: newValue })}
+				/>
 
-				{showFirstNameError && (
-					<ErrorMessage message={errorMessages.firstName} show={true} />
-				)}
+				{this.state.showValidationErrors &&
+					!isNameValid(this.state.firstNameInput) && (
+						<ErrorMessage message={errorMessages.firstName} show={true} />
+					)}
 
 				{/* Last Name Input */}
-				<div className="input-wrap">
-					<label>{"Last Name"}:</label>
-					<input
-						placeholder="Baggins"
-						value={lastName}
-						onChange={(e) => this.setState({ lastName: e.target.value })}
-						ref={this.lastNameRef}
-					/>
-				</div>
+				<ClassTextInput
+					label="Last Name"
+					placeholder="Baggins"
+					value={this.state.lastNameInput}
+					onChange={(newValue) => this.setState({ lastNameInput: newValue })}
+				/>
 
-				{showLastNameError && (
-					<ErrorMessage message={errorMessages.lastName} show={true} />
-				)}
+				{this.state.showValidationErrors &&
+					!isNameValid(this.state.lastNameInput) && (
+						<ErrorMessage message={errorMessages.lastName} show={true} />
+					)}
 
 				{/* Email Input */}
-				<div className="input-wrap">
-					<label>{"Email"}:</label>
-					<input
-						placeholder="bilbo-baggins@adventurehobbits.net"
-						value={email}
-						onChange={(e) => this.setState({ email: e.target.value })}
-						ref={this.emailRef}
-					/>
-				</div>
+				<ClassTextInput
+					label="Email"
+					placeholder="bilbo-baggins@adventurehobbits.net"
+					value={this.state.emailInput}
+					onChange={(newValue) => this.setState({ emailInput: newValue })}
+				/>
 
-				{showEmailError && (
-					<ErrorMessage message={errorMessages.email} show={true} />
-				)}
+				{this.state.showValidationErrors &&
+					!isEmailValid(this.state.emailInput) && (
+						<ErrorMessage message={errorMessages.email} show={true} />
+					)}
 
 				{/* City Input */}
-				<div className="input-wrap">
-					<label>{"City"}:</label>
-					<input
-						type="text"
-						list="cities"
-						value={city}
-						placeholder="Hobbiton"
-						onChange={this.handleCityChange}
-					/>
-					<datalist id="cities">
-						<option value="Hobbiton" />
-						{CITIES.map((city) => (
-							<option key={city} value={city} />
-						))}
-					</datalist>
-				</div>
+				<ClassTextInput
+					label="City"
+					placeholder="Hobbiton"
+					value={this.state.cityInput}
+					onChange={(newValue) => this.setState({ cityInput: newValue })}
+					list="cities"
+				/>
 
-				{showCityError && (
-					<ErrorMessage message={errorMessages.city} show={true} />
-				)}
+				<datalist id="cities">
+					<option value="Hobbiton" />
+					{CITIES.map((city) => (
+						<option key={city} value={city} />
+					))}
+				</datalist>
+
+				{this.state.showValidationErrors &&
+					!isCityValid(this.state.cityInput) && (
+						<ErrorMessage message={errorMessages.city} show={true} />
+					)}
 
 				{/* Phone Number */}
-				<div className="input-wrap">
-					<label htmlFor="phone">Phone:</label>
-					<div id="phone-input-wrap">
-						{this.phoneInputsRefs.map((ref, index) => (
-							<React.Fragment key={index}>
-								<input
-									type="text"
-									id={`phone-input-${index + 1}`}
-									placeholder="0"
-									maxLength={index < 3 ? 2 : 1}
-									pattern="[0-9]*"
-									inputMode="numeric"
-									ref={ref}
-									onChange={(e) =>
-										this.handlePhoneInputChange(index, e.target.value)
-									}
-								/>
-								{index < 3 && <span className="phone-input-dash">-</span>}
-							</React.Fragment>
-						))}
-					</div>
-				</div>
+				<ClassPhoneInput
+					onChange={(newValue) => this.setState({ phoneNumberInput: newValue })}
+					value={this.state.phoneNumberInput}
+					reset={this.state.resetPhoneInput}
+				/>
 
-				{showPhoneError && (
-					<ErrorMessage message={errorMessages.phoneNumber} show={true} />
-				)}
+				{this.state.showValidationErrors &&
+					!isPhoneValid(this.state.phoneNumberInput) && (
+						<ErrorMessage message={errorMessages.phoneNumber} show={true} />
+					)}
 
 				<input type="submit" value="Submit" />
 			</form>

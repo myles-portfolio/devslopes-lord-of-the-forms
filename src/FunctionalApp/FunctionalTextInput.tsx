@@ -1,5 +1,3 @@
-import React, { FC } from "react";
-
 interface FunctionalTextInputProps {
 	label: string;
 	placeholder?: string;
@@ -8,17 +6,13 @@ interface FunctionalTextInputProps {
 	list?: string;
 }
 
-export const FunctionalTextInput: FC<FunctionalTextInputProps> = ({
+export const FunctionalTextInput: React.FC<FunctionalTextInputProps> = ({
 	label,
 	placeholder,
 	value,
 	onChange,
 	list,
 }) => {
-	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		onChange(event.target.value);
-	};
-
 	return (
 		<div className="input-wrap">
 			<label>{label}:</label>
@@ -27,7 +21,7 @@ export const FunctionalTextInput: FC<FunctionalTextInputProps> = ({
 				placeholder={placeholder || ""}
 				value={value}
 				list={list}
-				onChange={handleInputChange}
+				onChange={(e) => onChange(e.target.value)}
 			/>
 		</div>
 	);

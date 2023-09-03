@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import React from "react";
 
 interface FunctionalPhoneInputProps {
 	onPhoneChange: (phone: string) => void;
-	isFormSubmitted: boolean;
+	value: string;
 }
 
 export const FunctionalPhoneInput = ({
 	onPhoneChange,
+	value,
 }: FunctionalPhoneInputProps) => {
 	const phoneInputsRefs = [
 		useRef<HTMLInputElement>(null),
@@ -16,7 +17,22 @@ export const FunctionalPhoneInput = ({
 		useRef<HTMLInputElement>(null),
 	];
 
-	const [phoneParts, setPhoneParts] = useState(["", "", "", ""]);
+	const [phoneParts, setPhoneParts] = useState(() => {
+		const parts: string[] = value.match(/.{1,2}/g) || [];
+		while (parts.length < 4) {
+			parts.push("");
+		}
+		return parts;
+	});
+
+	// Update the phoneParts state when the value prop changes
+	useEffect(() => {
+		const parts: string[] = value.match(/.{1,2}/g) || [];
+		while (parts.length < 4) {
+			parts.push("");
+		}
+		setPhoneParts(parts);
+	}, [value]);
 
 	const handlePhoneInputChange = (index: number, value: string) => {
 		if (!/^[0-9]*$/.test(value)) {
